@@ -1,0 +1,9 @@
+procedure Main() return integer
+{
+	var i, j: char;
+
+	j = 'c';
+
+	
+	return j;
+}

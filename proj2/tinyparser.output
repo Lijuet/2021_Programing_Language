@@ -1,0 +1,1934 @@
+Rules useless in parser due to conflicts
+
+   61 string: ID LEFT_SQA expression RIGHT_SQA
+
+
+State 123 conflicts: 12 shift/reduce
+State 132 conflicts: 16 reduce/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: procedure_decl_stm
+    2        | procedure_decl_stm procedures
+
+    3 statements: statement
+    4           | statement statements
+
+    5 statement: assign_stm
+    6          | procedure_call_stm
+    7          | if_stm
+    8          | if_else_stm
+    9          | while_stm
+   10          | code_block
+
+   11 assign_stm: lhs ASSIGN expression SEMICOLON
+
+   12 if_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+   14 while_stm: WHILE LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+   15 lhs: ID
+   16    | ID LEFT_SQA expression RIGHT_SQA
+
+   17 expression: expression binary_operator expression
+   18           | uniary_operator expression
+   19           | LEFT_PAR expression RIGHT_PAR
+   20           | factor
+
+   21 factor: ID
+   22       | integer
+   23       | BOOLEAN
+   24       | char
+   25       | string
+
+   26 char: CHAR
+   27     | ID LEFT_SQA expression RIGHT_SQA
+
+   28 integer: INTEGER
+   29        | ABSOLUTE ID ABSOLUTE
+
+   30 binary_operator: PLUS
+   31                | MINUS
+   32                | ASTERISK
+   33                | SLASH
+   34                | EQUAL
+   35                | NOT_EQUAL
+   36                | BIG
+   37                | BIG_EQUAL
+   38                | SMALL
+   39                | SMALL_EQUAL
+   40                | AND
+   41                | OR
+
+   42 uniary_operator: PLUS
+   43                | MINUS
+   44                | NEGATE
+
+   45 code_block: LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+   46 body: var_decl_stms
+   47     | var_decl_stms statements
+   48     | statements
+
+   49 body_of_nested_stmt: var_decl_stm
+   50                    | var_decl_stm statements
+   51                    | statements
+   52                    | %empty
+
+   53 return_type: INTEGER_TYPE
+   54            | CHAR_TYPE
+   55            | BOOLEAN_TYPE
+
+   56 type: INTEGER_TYPE
+   57     | CHAR_TYPE
+   58     | BOOLEAN_TYPE
+   59     | STRING_TYPE LEFT_SQA expression RIGHT_SQA
+
+   60 string: STRING
+   61       | ID LEFT_SQA expression RIGHT_SQA
+
+   62 var_decl_stms: var_decl_stms var_decl_stm
+   63              | var_decl_stm
+
+   64 var_decl_stm: VAR ids COLON type SEMICOLON
+
+   65 procedures: procedure_decl_stm
+   66           | procedure_decl_stm procedures
+
+   67 procedure_decl_stm: procedure_header body_of_procedure
+
+   68 body_of_procedure: LEFT_BRA return_stm RIGHT_BRA
+   69                  | LEFT_BRA body return_stm RIGHT_BRA
+
+   70 return_stm: RETURN expression SEMICOLON
+
+   71 procedure_header: PROCEDURE procedure_id LEFT_PAR parameter_list RIGHT_PAR RETURN return_type
+   72                 | PROCEDURE procedure_id LEFT_PAR RIGHT_PAR RETURN return_type
+   73                 | PROCEDURE MAIN LEFT_PAR RIGHT_PAR RETURN return_type
+
+   74 procedure_id: ID
+
+   75 parameter_list: ids COLON return_type
+   76               | parameter_list SEMICOLON ids COLON return_type
+
+   77 argument_list: expression COMMA argument_list
+   78              | expression
+   79              | %empty
+
+   80 procedure_call_stm: lhs ASSIGN procedure_id LEFT_PAR argument_list RIGHT_PAR SEMICOLON
+
+   81 ids: ids COMMA ID
+   82    | ID
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+MAIN (258) 73
+BOOLEAN_TYPE (259) 55 58
+CHAR_TYPE (260) 54 57
+INTEGER_TYPE (261) 53 56
+STRING_TYPE (262) 59
+ID (263) 15 16 21 27 29 61 74 81 82
+VAR (264) 64
+BOOLEAN (265) 23
+CHAR (266) 26
+STRING (267) 60
+INTEGER (268) 28
+LEFT_PAR (269) 12 13 14 19 71 72 73 80
+RIGHT_PAR (270) 12 13 14 19 71 72 73 80
+LEFT_BRA (271) 12 13 14 45 68 69
+RIGHT_BRA (272) 12 13 14 45 68 69
+LEFT_SQA (273) 16 27 59 61
+RIGHT_SQA (274) 16 27 59 61
+SEMICOLON (275) 11 64 70 76 80
+COLON (276) 64 75 76
+COMMA (277) 77 81
+IF (278) 12 13
+ELSE (279) 13
+WHILE (280) 14
+PROCEDURE (281) 71 72 73
+RETURN (282) 70 71 72 73
+ASSIGN (283) 11 80
+OR (284) 41
+AND (285) 40
+NEGATE (286) 44
+EQUAL (287) 34
+NOT_EQUAL (288) 35
+BIG (289) 36
+BIG_EQUAL (290) 37
+SMALL (291) 38
+SMALL_EQUAL (292) 39
+PLUS (293) 30 42
+MINUS (294) 31 43
+ASTERISK (295) 32
+SLASH (296) 33
+ABSOLUTE (297) 29
+UNIARY (298)
+
+
+Nonterminals, with rules where they appear
+
+$accept (44)
+    on left: 0
+program (45)
+    on left: 1 2, on right: 0
+statements (46)
+    on left: 3 4, on right: 4 47 48 50 51
+statement (47)
+    on left: 5 6 7 8 9 10, on right: 3 4
+assign_stm (48)
+    on left: 11, on right: 5
+if_stm (49)
+    on left: 12, on right: 7
+if_else_stm (50)
+    on left: 13, on right: 8
+while_stm (51)
+    on left: 14, on right: 9
+lhs (52)
+    on left: 15 16, on right: 11 80
+expression (53)
+    on left: 17 18 19 20, on right: 11 12 13 14 16 17 18 19 27 59 61
+    70 77 78
+factor (54)
+    on left: 21 22 23 24 25, on right: 20
+char (55)
+    on left: 26 27, on right: 24
+integer (56)
+    on left: 28 29, on right: 22
+binary_operator (57)
+    on left: 30 31 32 33 34 35 36 37 38 39 40 41, on right: 17
+uniary_operator (58)
+    on left: 42 43 44, on right: 18
+code_block (59)
+    on left: 45, on right: 10
+body (60)
+    on left: 46 47 48, on right: 69
+body_of_nested_stmt (61)
+    on left: 49 50 51 52, on right: 12 13 14 45
+return_type (62)
+    on left: 53 54 55, on right: 71 72 73 75 76
+type (63)
+    on left: 56 57 58 59, on right: 64
+string (64)
+    on left: 60 61, on right: 25
+var_decl_stms (65)
+    on left: 62 63, on right: 46 47 62
+var_decl_stm (66)
+    on left: 64, on right: 49 50 62 63
+procedures (67)
+    on left: 65 66, on right: 2 66
+procedure_decl_stm (68)
+    on left: 67, on right: 1 2 65 66
+body_of_procedure (69)
+    on left: 68 69, on right: 67
+return_stm (70)
+    on left: 70, on right: 68 69
+procedure_header (71)
+    on left: 71 72 73, on right: 67
+procedure_id (72)
+    on left: 74, on right: 71 72 80
+parameter_list (73)
+    on left: 75 76, on right: 71 76
+argument_list (74)
+    on left: 77 78 79, on right: 77 80
+procedure_call_stm (75)
+    on left: 80, on right: 6
+ids (76)
+    on left: 81 82, on right: 64 75 76 81
+
+
+State 0
+
+    0 $accept: . program $end
+
+    PROCEDURE  shift, and go to state 1
+
+    program             go to state 2
+    procedure_decl_stm  go to state 3
+    procedure_header    go to state 4
+
+
+State 1
+
+   71 procedure_header: PROCEDURE . procedure_id LEFT_PAR parameter_list RIGHT_PAR RETURN return_type
+   72                 | PROCEDURE . procedure_id LEFT_PAR RIGHT_PAR RETURN return_type
+   73                 | PROCEDURE . MAIN LEFT_PAR RIGHT_PAR RETURN return_type
+
+    MAIN  shift, and go to state 5
+    ID    shift, and go to state 6
+
+    procedure_id  go to state 7
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 8
+
+
+State 3
+
+    1 program: procedure_decl_stm .
+    2        | procedure_decl_stm . procedures
+
+    PROCEDURE  shift, and go to state 1
+
+    $default  reduce using rule 1 (program)
+
+    procedures          go to state 9
+    procedure_decl_stm  go to state 10
+    procedure_header    go to state 4
+
+
+State 4
+
+   67 procedure_decl_stm: procedure_header . body_of_procedure
+
+    LEFT_BRA  shift, and go to state 11
+
+    body_of_procedure  go to state 12
+
+
+State 5
+
+   73 procedure_header: PROCEDURE MAIN . LEFT_PAR RIGHT_PAR RETURN return_type
+
+    LEFT_PAR  shift, and go to state 13
+
+
+State 6
+
+   74 procedure_id: ID .
+
+    $default  reduce using rule 74 (procedure_id)
+
+
+State 7
+
+   71 procedure_header: PROCEDURE procedure_id . LEFT_PAR parameter_list RIGHT_PAR RETURN return_type
+   72                 | PROCEDURE procedure_id . LEFT_PAR RIGHT_PAR RETURN return_type
+
+    LEFT_PAR  shift, and go to state 14
+
+
+State 8
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 9
+
+    2 program: procedure_decl_stm procedures .
+
+    $default  reduce using rule 2 (program)
+
+
+State 10
+
+   65 procedures: procedure_decl_stm .
+   66           | procedure_decl_stm . procedures
+
+    PROCEDURE  shift, and go to state 1
+
+    $default  reduce using rule 65 (procedures)
+
+    procedures          go to state 15
+    procedure_decl_stm  go to state 10
+    procedure_header    go to state 4
+
+
+State 11
+
+   68 body_of_procedure: LEFT_BRA . return_stm RIGHT_BRA
+   69                  | LEFT_BRA . body return_stm RIGHT_BRA
+
+    ID        shift, and go to state 16
+    VAR       shift, and go to state 17
+    LEFT_BRA  shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+    RETURN    shift, and go to state 21
+
+    statements          go to state 22
+    statement           go to state 23
+    assign_stm          go to state 24
+    if_stm              go to state 25
+    if_else_stm         go to state 26
+    while_stm           go to state 27
+    lhs                 go to state 28
+    code_block          go to state 29
+    body                go to state 30
+    var_decl_stms       go to state 31
+    var_decl_stm        go to state 32
+    return_stm          go to state 33
+    procedure_call_stm  go to state 34
+
+
+State 12
+
+   67 procedure_decl_stm: procedure_header body_of_procedure .
+
+    $default  reduce using rule 67 (procedure_decl_stm)
+
+
+State 13
+
+   73 procedure_header: PROCEDURE MAIN LEFT_PAR . RIGHT_PAR RETURN return_type
+
+    RIGHT_PAR  shift, and go to state 35
+
+
+State 14
+
+   71 procedure_header: PROCEDURE procedure_id LEFT_PAR . parameter_list RIGHT_PAR RETURN return_type
+   72                 | PROCEDURE procedure_id LEFT_PAR . RIGHT_PAR RETURN return_type
+
+    ID         shift, and go to state 36
+    RIGHT_PAR  shift, and go to state 37
+
+    parameter_list  go to state 38
+    ids             go to state 39
+
+
+State 15
+
+   66 procedures: procedure_decl_stm procedures .
+
+    $default  reduce using rule 66 (procedures)
+
+
+State 16
+
+   15 lhs: ID .
+   16    | ID . LEFT_SQA expression RIGHT_SQA
+
+    LEFT_SQA  shift, and go to state 40
+
+    $default  reduce using rule 15 (lhs)
+
+
+State 17
+
+   64 var_decl_stm: VAR . ids COLON type SEMICOLON
+
+    ID  shift, and go to state 36
+
+    ids  go to state 41
+
+
+State 18
+
+   45 code_block: LEFT_BRA . body_of_nested_stmt RIGHT_BRA
+
+    ID        shift, and go to state 16
+    VAR       shift, and go to state 17
+    LEFT_BRA  shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+
+    $default  reduce using rule 52 (body_of_nested_stmt)
+
+    statements           go to state 42
+    statement            go to state 23
+    assign_stm           go to state 24
+    if_stm               go to state 25
+    if_else_stm          go to state 26
+    while_stm            go to state 27
+    lhs                  go to state 28
+    code_block           go to state 29
+    body_of_nested_stmt  go to state 43
+    var_decl_stm         go to state 44
+    procedure_call_stm   go to state 34
+
+
+State 19
+
+   12 if_stm: IF . LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA
+   13 if_else_stm: IF . LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    LEFT_PAR  shift, and go to state 45
+
+
+State 20
+
+   14 while_stm: WHILE . LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    LEFT_PAR  shift, and go to state 46
+
+
+State 21
+
+   70 return_stm: RETURN . expression SEMICOLON
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 57
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 22
+
+   48 body: statements .
+
+    $default  reduce using rule 48 (body)
+
+
+State 23
+
+    3 statements: statement .
+    4           | statement . statements
+
+    ID        shift, and go to state 16
+    LEFT_BRA  shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+
+    $default  reduce using rule 3 (statements)
+
+    statements          go to state 63
+    statement           go to state 23
+    assign_stm          go to state 24
+    if_stm              go to state 25
+    if_else_stm         go to state 26
+    while_stm           go to state 27
+    lhs                 go to state 28
+    code_block          go to state 29
+    procedure_call_stm  go to state 34
+
+
+State 24
+
+    5 statement: assign_stm .
+
+    $default  reduce using rule 5 (statement)
+
+
+State 25
+
+    7 statement: if_stm .
+
+    $default  reduce using rule 7 (statement)
+
+
+State 26
+
+    8 statement: if_else_stm .
+
+    $default  reduce using rule 8 (statement)
+
+
+State 27
+
+    9 statement: while_stm .
+
+    $default  reduce using rule 9 (statement)
+
+
+State 28
+
+   11 assign_stm: lhs . ASSIGN expression SEMICOLON
+   80 procedure_call_stm: lhs . ASSIGN procedure_id LEFT_PAR argument_list RIGHT_PAR SEMICOLON
+
+    ASSIGN  shift, and go to state 64
+
+
+State 29
+
+   10 statement: code_block .
+
+    $default  reduce using rule 10 (statement)
+
+
+State 30
+
+   69 body_of_procedure: LEFT_BRA body . return_stm RIGHT_BRA
+
+    RETURN  shift, and go to state 21
+
+    return_stm  go to state 65
+
+
+State 31
+
+   46 body: var_decl_stms .
+   47     | var_decl_stms . statements
+   62 var_decl_stms: var_decl_stms . var_decl_stm
+
+    ID        shift, and go to state 16
+    VAR       shift, and go to state 17
+    LEFT_BRA  shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+
+    $default  reduce using rule 46 (body)
+
+    statements          go to state 66
+    statement           go to state 23
+    assign_stm          go to state 24
+    if_stm              go to state 25
+    if_else_stm         go to state 26
+    while_stm           go to state 27
+    lhs                 go to state 28
+    code_block          go to state 29
+    var_decl_stm        go to state 67
+    procedure_call_stm  go to state 34
+
+
+State 32
+
+   63 var_decl_stms: var_decl_stm .
+
+    $default  reduce using rule 63 (var_decl_stms)
+
+
+State 33
+
+   68 body_of_procedure: LEFT_BRA return_stm . RIGHT_BRA
+
+    RIGHT_BRA  shift, and go to state 68
+
+
+State 34
+
+    6 statement: procedure_call_stm .
+
+    $default  reduce using rule 6 (statement)
+
+
+State 35
+
+   73 procedure_header: PROCEDURE MAIN LEFT_PAR RIGHT_PAR . RETURN return_type
+
+    RETURN  shift, and go to state 69
+
+
+State 36
+
+   82 ids: ID .
+
+    $default  reduce using rule 82 (ids)
+
+
+State 37
+
+   72 procedure_header: PROCEDURE procedure_id LEFT_PAR RIGHT_PAR . RETURN return_type
+
+    RETURN  shift, and go to state 70
+
+
+State 38
+
+   71 procedure_header: PROCEDURE procedure_id LEFT_PAR parameter_list . RIGHT_PAR RETURN return_type
+   76 parameter_list: parameter_list . SEMICOLON ids COLON return_type
+
+    RIGHT_PAR  shift, and go to state 71
+    SEMICOLON  shift, and go to state 72
+
+
+State 39
+
+   75 parameter_list: ids . COLON return_type
+   81 ids: ids . COMMA ID
+
+    COLON  shift, and go to state 73
+    COMMA  shift, and go to state 74
+
+
+State 40
+
+   16 lhs: ID LEFT_SQA . expression RIGHT_SQA
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 75
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 41
+
+   64 var_decl_stm: VAR ids . COLON type SEMICOLON
+   81 ids: ids . COMMA ID
+
+    COLON  shift, and go to state 76
+    COMMA  shift, and go to state 74
+
+
+State 42
+
+   51 body_of_nested_stmt: statements .
+
+    $default  reduce using rule 51 (body_of_nested_stmt)
+
+
+State 43
+
+   45 code_block: LEFT_BRA body_of_nested_stmt . RIGHT_BRA
+
+    RIGHT_BRA  shift, and go to state 77
+
+
+State 44
+
+   49 body_of_nested_stmt: var_decl_stm .
+   50                    | var_decl_stm . statements
+
+    ID        shift, and go to state 16
+    LEFT_BRA  shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+
+    $default  reduce using rule 49 (body_of_nested_stmt)
+
+    statements          go to state 78
+    statement           go to state 23
+    assign_stm          go to state 24
+    if_stm              go to state 25
+    if_else_stm         go to state 26
+    while_stm           go to state 27
+    lhs                 go to state 28
+    code_block          go to state 29
+    procedure_call_stm  go to state 34
+
+
+State 45
+
+   12 if_stm: IF LEFT_PAR . expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA
+   13 if_else_stm: IF LEFT_PAR . expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 79
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 46
+
+   14 while_stm: WHILE LEFT_PAR . expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 80
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 47
+
+   21 factor: ID .
+   27 char: ID . LEFT_SQA expression RIGHT_SQA
+   61 string: ID . LEFT_SQA expression RIGHT_SQA
+
+    LEFT_SQA  shift, and go to state 81
+
+    $default  reduce using rule 21 (factor)
+
+
+State 48
+
+   23 factor: BOOLEAN .
+
+    $default  reduce using rule 23 (factor)
+
+
+State 49
+
+   26 char: CHAR .
+
+    $default  reduce using rule 26 (char)
+
+
+State 50
+
+   60 string: STRING .
+
+    $default  reduce using rule 60 (string)
+
+
+State 51
+
+   28 integer: INTEGER .
+
+    $default  reduce using rule 28 (integer)
+
+
+State 52
+
+   19 expression: LEFT_PAR . expression RIGHT_PAR
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 82
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 53
+
+   44 uniary_operator: NEGATE .
+
+    $default  reduce using rule 44 (uniary_operator)
+
+
+State 54
+
+   42 uniary_operator: PLUS .
+
+    $default  reduce using rule 42 (uniary_operator)
+
+
+State 55
+
+   43 uniary_operator: MINUS .
+
+    $default  reduce using rule 43 (uniary_operator)
+
+
+State 56
+
+   29 integer: ABSOLUTE . ID ABSOLUTE
+
+    ID  shift, and go to state 83
+
+
+State 57
+
+   17 expression: expression . binary_operator expression
+   70 return_stm: RETURN expression . SEMICOLON
+
+    SEMICOLON    shift, and go to state 84
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    binary_operator  go to state 97
+
+
+State 58
+
+   20 expression: factor .
+
+    $default  reduce using rule 20 (expression)
+
+
+State 59
+
+   24 factor: char .
+
+    $default  reduce using rule 24 (factor)
+
+
+State 60
+
+   22 factor: integer .
+
+    $default  reduce using rule 22 (factor)
+
+
+State 61
+
+   18 expression: uniary_operator . expression
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 98
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 62
+
+   25 factor: string .
+
+    $default  reduce using rule 25 (factor)
+
+
+State 63
+
+    4 statements: statement statements .
+
+    $default  reduce using rule 4 (statements)
+
+
+State 64
+
+   11 assign_stm: lhs ASSIGN . expression SEMICOLON
+   80 procedure_call_stm: lhs ASSIGN . procedure_id LEFT_PAR argument_list RIGHT_PAR SEMICOLON
+
+    ID        shift, and go to state 99
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 100
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+    procedure_id     go to state 101
+
+
+State 65
+
+   69 body_of_procedure: LEFT_BRA body return_stm . RIGHT_BRA
+
+    RIGHT_BRA  shift, and go to state 102
+
+
+State 66
+
+   47 body: var_decl_stms statements .
+
+    $default  reduce using rule 47 (body)
+
+
+State 67
+
+   62 var_decl_stms: var_decl_stms var_decl_stm .
+
+    $default  reduce using rule 62 (var_decl_stms)
+
+
+State 68
+
+   68 body_of_procedure: LEFT_BRA return_stm RIGHT_BRA .
+
+    $default  reduce using rule 68 (body_of_procedure)
+
+
+State 69
+
+   73 procedure_header: PROCEDURE MAIN LEFT_PAR RIGHT_PAR RETURN . return_type
+
+    BOOLEAN_TYPE  shift, and go to state 103
+    CHAR_TYPE     shift, and go to state 104
+    INTEGER_TYPE  shift, and go to state 105
+
+    return_type  go to state 106
+
+
+State 70
+
+   72 procedure_header: PROCEDURE procedure_id LEFT_PAR RIGHT_PAR RETURN . return_type
+
+    BOOLEAN_TYPE  shift, and go to state 103
+    CHAR_TYPE     shift, and go to state 104
+    INTEGER_TYPE  shift, and go to state 105
+
+    return_type  go to state 107
+
+
+State 71
+
+   71 procedure_header: PROCEDURE procedure_id LEFT_PAR parameter_list RIGHT_PAR . RETURN return_type
+
+    RETURN  shift, and go to state 108
+
+
+State 72
+
+   76 parameter_list: parameter_list SEMICOLON . ids COLON return_type
+
+    ID  shift, and go to state 36
+
+    ids  go to state 109
+
+
+State 73
+
+   75 parameter_list: ids COLON . return_type
+
+    BOOLEAN_TYPE  shift, and go to state 103
+    CHAR_TYPE     shift, and go to state 104
+    INTEGER_TYPE  shift, and go to state 105
+
+    return_type  go to state 110
+
+
+State 74
+
+   81 ids: ids COMMA . ID
+
+    ID  shift, and go to state 111
+
+
+State 75
+
+   16 lhs: ID LEFT_SQA expression . RIGHT_SQA
+   17 expression: expression . binary_operator expression
+
+    RIGHT_SQA    shift, and go to state 112
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    binary_operator  go to state 97
+
+
+State 76
+
+   64 var_decl_stm: VAR ids COLON . type SEMICOLON
+
+    BOOLEAN_TYPE  shift, and go to state 113
+    CHAR_TYPE     shift, and go to state 114
+    INTEGER_TYPE  shift, and go to state 115
+    STRING_TYPE   shift, and go to state 116
+
+    type  go to state 117
+
+
+State 77
+
+   45 code_block: LEFT_BRA body_of_nested_stmt RIGHT_BRA .
+
+    $default  reduce using rule 45 (code_block)
+
+
+State 78
+
+   50 body_of_nested_stmt: var_decl_stm statements .
+
+    $default  reduce using rule 50 (body_of_nested_stmt)
+
+
+State 79
+
+   12 if_stm: IF LEFT_PAR expression . RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA
+   13 if_else_stm: IF LEFT_PAR expression . RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA
+   17 expression: expression . binary_operator expression
+
+    RIGHT_PAR    shift, and go to state 118
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    binary_operator  go to state 97
+
+
+State 80
+
+   14 while_stm: WHILE LEFT_PAR expression . RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA
+   17 expression: expression . binary_operator expression
+
+    RIGHT_PAR    shift, and go to state 119
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    binary_operator  go to state 97
+
+
+State 81
+
+   27 char: ID LEFT_SQA . expression RIGHT_SQA
+   61 string: ID LEFT_SQA . expression RIGHT_SQA
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 120
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 82
+
+   17 expression: expression . binary_operator expression
+   19           | LEFT_PAR expression . RIGHT_PAR
+
+    RIGHT_PAR    shift, and go to state 121
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    binary_operator  go to state 97
+
+
+State 83
+
+   29 integer: ABSOLUTE ID . ABSOLUTE
+
+    ABSOLUTE  shift, and go to state 122
+
+
+State 84
+
+   70 return_stm: RETURN expression SEMICOLON .
+
+    $default  reduce using rule 70 (return_stm)
+
+
+State 85
+
+   41 binary_operator: OR .
+
+    $default  reduce using rule 41 (binary_operator)
+
+
+State 86
+
+   40 binary_operator: AND .
+
+    $default  reduce using rule 40 (binary_operator)
+
+
+State 87
+
+   34 binary_operator: EQUAL .
+
+    $default  reduce using rule 34 (binary_operator)
+
+
+State 88
+
+   35 binary_operator: NOT_EQUAL .
+
+    $default  reduce using rule 35 (binary_operator)
+
+
+State 89
+
+   36 binary_operator: BIG .
+
+    $default  reduce using rule 36 (binary_operator)
+
+
+State 90
+
+   37 binary_operator: BIG_EQUAL .
+
+    $default  reduce using rule 37 (binary_operator)
+
+
+State 91
+
+   38 binary_operator: SMALL .
+
+    $default  reduce using rule 38 (binary_operator)
+
+
+State 92
+
+   39 binary_operator: SMALL_EQUAL .
+
+    $default  reduce using rule 39 (binary_operator)
+
+
+State 93
+
+   30 binary_operator: PLUS .
+
+    $default  reduce using rule 30 (binary_operator)
+
+
+State 94
+
+   31 binary_operator: MINUS .
+
+    $default  reduce using rule 31 (binary_operator)
+
+
+State 95
+
+   32 binary_operator: ASTERISK .
+
+    $default  reduce using rule 32 (binary_operator)
+
+
+State 96
+
+   33 binary_operator: SLASH .
+
+    $default  reduce using rule 33 (binary_operator)
+
+
+State 97
+
+   17 expression: expression binary_operator . expression
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 123
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 98
+
+   17 expression: expression . binary_operator expression
+   18           | uniary_operator expression .
+
+    $default  reduce using rule 18 (expression)
+
+    binary_operator  go to state 97
+
+
+State 99
+
+   21 factor: ID .
+   27 char: ID . LEFT_SQA expression RIGHT_SQA
+   61 string: ID . LEFT_SQA expression RIGHT_SQA
+   74 procedure_id: ID .
+
+    LEFT_SQA  shift, and go to state 81
+
+    LEFT_PAR  reduce using rule 74 (procedure_id)
+    $default  reduce using rule 21 (factor)
+
+
+State 100
+
+   11 assign_stm: lhs ASSIGN expression . SEMICOLON
+   17 expression: expression . binary_operator expression
+
+    SEMICOLON    shift, and go to state 124
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    binary_operator  go to state 97
+
+
+State 101
+
+   80 procedure_call_stm: lhs ASSIGN procedure_id . LEFT_PAR argument_list RIGHT_PAR SEMICOLON
+
+    LEFT_PAR  shift, and go to state 125
+
+
+State 102
+
+   69 body_of_procedure: LEFT_BRA body return_stm RIGHT_BRA .
+
+    $default  reduce using rule 69 (body_of_procedure)
+
+
+State 103
+
+   55 return_type: BOOLEAN_TYPE .
+
+    $default  reduce using rule 55 (return_type)
+
+
+State 104
+
+   54 return_type: CHAR_TYPE .
+
+    $default  reduce using rule 54 (return_type)
+
+
+State 105
+
+   53 return_type: INTEGER_TYPE .
+
+    $default  reduce using rule 53 (return_type)
+
+
+State 106
+
+   73 procedure_header: PROCEDURE MAIN LEFT_PAR RIGHT_PAR RETURN return_type .
+
+    $default  reduce using rule 73 (procedure_header)
+
+
+State 107
+
+   72 procedure_header: PROCEDURE procedure_id LEFT_PAR RIGHT_PAR RETURN return_type .
+
+    $default  reduce using rule 72 (procedure_header)
+
+
+State 108
+
+   71 procedure_header: PROCEDURE procedure_id LEFT_PAR parameter_list RIGHT_PAR RETURN . return_type
+
+    BOOLEAN_TYPE  shift, and go to state 103
+    CHAR_TYPE     shift, and go to state 104
+    INTEGER_TYPE  shift, and go to state 105
+
+    return_type  go to state 126
+
+
+State 109
+
+   76 parameter_list: parameter_list SEMICOLON ids . COLON return_type
+   81 ids: ids . COMMA ID
+
+    COLON  shift, and go to state 127
+    COMMA  shift, and go to state 74
+
+
+State 110
+
+   75 parameter_list: ids COLON return_type .
+
+    $default  reduce using rule 75 (parameter_list)
+
+
+State 111
+
+   81 ids: ids COMMA ID .
+
+    $default  reduce using rule 81 (ids)
+
+
+State 112
+
+   16 lhs: ID LEFT_SQA expression RIGHT_SQA .
+
+    $default  reduce using rule 16 (lhs)
+
+
+State 113
+
+   58 type: BOOLEAN_TYPE .
+
+    $default  reduce using rule 58 (type)
+
+
+State 114
+
+   57 type: CHAR_TYPE .
+
+    $default  reduce using rule 57 (type)
+
+
+State 115
+
+   56 type: INTEGER_TYPE .
+
+    $default  reduce using rule 56 (type)
+
+
+State 116
+
+   59 type: STRING_TYPE . LEFT_SQA expression RIGHT_SQA
+
+    LEFT_SQA  shift, and go to state 128
+
+
+State 117
+
+   64 var_decl_stm: VAR ids COLON type . SEMICOLON
+
+    SEMICOLON  shift, and go to state 129
+
+
+State 118
+
+   12 if_stm: IF LEFT_PAR expression RIGHT_PAR . LEFT_BRA body_of_nested_stmt RIGHT_BRA
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR . LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    LEFT_BRA  shift, and go to state 130
+
+
+State 119
+
+   14 while_stm: WHILE LEFT_PAR expression RIGHT_PAR . LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    LEFT_BRA  shift, and go to state 131
+
+
+State 120
+
+   17 expression: expression . binary_operator expression
+   27 char: ID LEFT_SQA expression . RIGHT_SQA
+   61 string: ID LEFT_SQA expression . RIGHT_SQA
+
+    RIGHT_SQA    shift, and go to state 132
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    binary_operator  go to state 97
+
+
+State 121
+
+   19 expression: LEFT_PAR expression RIGHT_PAR .
+
+    $default  reduce using rule 19 (expression)
+
+
+State 122
+
+   29 integer: ABSOLUTE ID ABSOLUTE .
+
+    $default  reduce using rule 29 (integer)
+
+
+State 123
+
+   17 expression: expression . binary_operator expression
+   17           | expression binary_operator expression .
+
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    OR           [reduce using rule 17 (expression)]
+    AND          [reduce using rule 17 (expression)]
+    EQUAL        [reduce using rule 17 (expression)]
+    NOT_EQUAL    [reduce using rule 17 (expression)]
+    BIG          [reduce using rule 17 (expression)]
+    BIG_EQUAL    [reduce using rule 17 (expression)]
+    SMALL        [reduce using rule 17 (expression)]
+    SMALL_EQUAL  [reduce using rule 17 (expression)]
+    PLUS         [reduce using rule 17 (expression)]
+    MINUS        [reduce using rule 17 (expression)]
+    ASTERISK     [reduce using rule 17 (expression)]
+    SLASH        [reduce using rule 17 (expression)]
+    $default     reduce using rule 17 (expression)
+
+    binary_operator  go to state 97
+
+
+State 124
+
+   11 assign_stm: lhs ASSIGN expression SEMICOLON .
+
+    $default  reduce using rule 11 (assign_stm)
+
+
+State 125
+
+   80 procedure_call_stm: lhs ASSIGN procedure_id LEFT_PAR . argument_list RIGHT_PAR SEMICOLON
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    $default  reduce using rule 79 (argument_list)
+
+    expression       go to state 133
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+    argument_list    go to state 134
+
+
+State 126
+
+   71 procedure_header: PROCEDURE procedure_id LEFT_PAR parameter_list RIGHT_PAR RETURN return_type .
+
+    $default  reduce using rule 71 (procedure_header)
+
+
+State 127
+
+   76 parameter_list: parameter_list SEMICOLON ids COLON . return_type
+
+    BOOLEAN_TYPE  shift, and go to state 103
+    CHAR_TYPE     shift, and go to state 104
+    INTEGER_TYPE  shift, and go to state 105
+
+    return_type  go to state 135
+
+
+State 128
+
+   59 type: STRING_TYPE LEFT_SQA . expression RIGHT_SQA
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    expression       go to state 136
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+
+
+State 129
+
+   64 var_decl_stm: VAR ids COLON type SEMICOLON .
+
+    $default  reduce using rule 64 (var_decl_stm)
+
+
+State 130
+
+   12 if_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA . body_of_nested_stmt RIGHT_BRA
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA . body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    ID        shift, and go to state 16
+    VAR       shift, and go to state 17
+    LEFT_BRA  shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+
+    $default  reduce using rule 52 (body_of_nested_stmt)
+
+    statements           go to state 42
+    statement            go to state 23
+    assign_stm           go to state 24
+    if_stm               go to state 25
+    if_else_stm          go to state 26
+    while_stm            go to state 27
+    lhs                  go to state 28
+    code_block           go to state 29
+    body_of_nested_stmt  go to state 137
+    var_decl_stm         go to state 44
+    procedure_call_stm   go to state 34
+
+
+State 131
+
+   14 while_stm: WHILE LEFT_PAR expression RIGHT_PAR LEFT_BRA . body_of_nested_stmt RIGHT_BRA
+
+    ID        shift, and go to state 16
+    VAR       shift, and go to state 17
+    LEFT_BRA  shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+
+    $default  reduce using rule 52 (body_of_nested_stmt)
+
+    statements           go to state 42
+    statement            go to state 23
+    assign_stm           go to state 24
+    if_stm               go to state 25
+    if_else_stm          go to state 26
+    while_stm            go to state 27
+    lhs                  go to state 28
+    code_block           go to state 29
+    body_of_nested_stmt  go to state 138
+    var_decl_stm         go to state 44
+    procedure_call_stm   go to state 34
+
+
+State 132
+
+   27 char: ID LEFT_SQA expression RIGHT_SQA .
+   61 string: ID LEFT_SQA expression RIGHT_SQA .
+
+    RIGHT_PAR    reduce using rule 27 (char)
+    RIGHT_PAR    [reduce using rule 61 (string)]
+    RIGHT_SQA    reduce using rule 27 (char)
+    RIGHT_SQA    [reduce using rule 61 (string)]
+    SEMICOLON    reduce using rule 27 (char)
+    SEMICOLON    [reduce using rule 61 (string)]
+    COMMA        reduce using rule 27 (char)
+    COMMA        [reduce using rule 61 (string)]
+    OR           reduce using rule 27 (char)
+    OR           [reduce using rule 61 (string)]
+    AND          reduce using rule 27 (char)
+    AND          [reduce using rule 61 (string)]
+    EQUAL        reduce using rule 27 (char)
+    EQUAL        [reduce using rule 61 (string)]
+    NOT_EQUAL    reduce using rule 27 (char)
+    NOT_EQUAL    [reduce using rule 61 (string)]
+    BIG          reduce using rule 27 (char)
+    BIG          [reduce using rule 61 (string)]
+    BIG_EQUAL    reduce using rule 27 (char)
+    BIG_EQUAL    [reduce using rule 61 (string)]
+    SMALL        reduce using rule 27 (char)
+    SMALL        [reduce using rule 61 (string)]
+    SMALL_EQUAL  reduce using rule 27 (char)
+    SMALL_EQUAL  [reduce using rule 61 (string)]
+    PLUS         reduce using rule 27 (char)
+    PLUS         [reduce using rule 61 (string)]
+    MINUS        reduce using rule 27 (char)
+    MINUS        [reduce using rule 61 (string)]
+    ASTERISK     reduce using rule 27 (char)
+    ASTERISK     [reduce using rule 61 (string)]
+    SLASH        reduce using rule 27 (char)
+    SLASH        [reduce using rule 61 (string)]
+    $default     reduce using rule 27 (char)
+
+
+State 133
+
+   17 expression: expression . binary_operator expression
+   77 argument_list: expression . COMMA argument_list
+   78              | expression .
+
+    COMMA        shift, and go to state 139
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    $default  reduce using rule 78 (argument_list)
+
+    binary_operator  go to state 97
+
+
+State 134
+
+   80 procedure_call_stm: lhs ASSIGN procedure_id LEFT_PAR argument_list . RIGHT_PAR SEMICOLON
+
+    RIGHT_PAR  shift, and go to state 140
+
+
+State 135
+
+   76 parameter_list: parameter_list SEMICOLON ids COLON return_type .
+
+    $default  reduce using rule 76 (parameter_list)
+
+
+State 136
+
+   17 expression: expression . binary_operator expression
+   59 type: STRING_TYPE LEFT_SQA expression . RIGHT_SQA
+
+    RIGHT_SQA    shift, and go to state 141
+    OR           shift, and go to state 85
+    AND          shift, and go to state 86
+    EQUAL        shift, and go to state 87
+    NOT_EQUAL    shift, and go to state 88
+    BIG          shift, and go to state 89
+    BIG_EQUAL    shift, and go to state 90
+    SMALL        shift, and go to state 91
+    SMALL_EQUAL  shift, and go to state 92
+    PLUS         shift, and go to state 93
+    MINUS        shift, and go to state 94
+    ASTERISK     shift, and go to state 95
+    SLASH        shift, and go to state 96
+
+    binary_operator  go to state 97
+
+
+State 137
+
+   12 if_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt . RIGHT_BRA
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt . RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    RIGHT_BRA  shift, and go to state 142
+
+
+State 138
+
+   14 while_stm: WHILE LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt . RIGHT_BRA
+
+    RIGHT_BRA  shift, and go to state 143
+
+
+State 139
+
+   77 argument_list: expression COMMA . argument_list
+
+    ID        shift, and go to state 47
+    BOOLEAN   shift, and go to state 48
+    CHAR      shift, and go to state 49
+    STRING    shift, and go to state 50
+    INTEGER   shift, and go to state 51
+    LEFT_PAR  shift, and go to state 52
+    NEGATE    shift, and go to state 53
+    PLUS      shift, and go to state 54
+    MINUS     shift, and go to state 55
+    ABSOLUTE  shift, and go to state 56
+
+    $default  reduce using rule 79 (argument_list)
+
+    expression       go to state 133
+    factor           go to state 58
+    char             go to state 59
+    integer          go to state 60
+    uniary_operator  go to state 61
+    string           go to state 62
+    argument_list    go to state 144
+
+
+State 140
+
+   80 procedure_call_stm: lhs ASSIGN procedure_id LEFT_PAR argument_list RIGHT_PAR . SEMICOLON
+
+    SEMICOLON  shift, and go to state 145
+
+
+State 141
+
+   59 type: STRING_TYPE LEFT_SQA expression RIGHT_SQA .
+
+    $default  reduce using rule 59 (type)
+
+
+State 142
+
+   12 if_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA .
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA . ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    ELSE  shift, and go to state 146
+
+    $default  reduce using rule 12 (if_stm)
+
+
+State 143
+
+   14 while_stm: WHILE LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA .
+
+    $default  reduce using rule 14 (while_stm)
+
+
+State 144
+
+   77 argument_list: expression COMMA argument_list .
+
+    $default  reduce using rule 77 (argument_list)
+
+
+State 145
+
+   80 procedure_call_stm: lhs ASSIGN procedure_id LEFT_PAR argument_list RIGHT_PAR SEMICOLON .
+
+    $default  reduce using rule 80 (procedure_call_stm)
+
+
+State 146
+
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE . LEFT_BRA body_of_nested_stmt RIGHT_BRA
+
+    LEFT_BRA  shift, and go to state 147
+
+
+State 147
+
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA . body_of_nested_stmt RIGHT_BRA
+
+    ID        shift, and go to state 16
+    VAR       shift, and go to state 17
+    LEFT_BRA  shift, and go to state 18
+    IF        shift, and go to state 19
+    WHILE     shift, and go to state 20
+
+    $default  reduce using rule 52 (body_of_nested_stmt)
+
+    statements           go to state 42
+    statement            go to state 23
+    assign_stm           go to state 24
+    if_stm               go to state 25
+    if_else_stm          go to state 26
+    while_stm            go to state 27
+    lhs                  go to state 28
+    code_block           go to state 29
+    body_of_nested_stmt  go to state 148
+    var_decl_stm         go to state 44
+    procedure_call_stm   go to state 34
+
+
+State 148
+
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt . RIGHT_BRA
+
+    RIGHT_BRA  shift, and go to state 149
+
+
+State 149
+
+   13 if_else_stm: IF LEFT_PAR expression RIGHT_PAR LEFT_BRA body_of_nested_stmt RIGHT_BRA ELSE LEFT_BRA body_of_nested_stmt RIGHT_BRA .
+
+    $default  reduce using rule 13 (if_else_stm)

@@ -1,0 +1,11 @@
+procedure foo(inc: integer) return boolean{
+    var ret : boolean;
+
+    if(inc > 0){
+        ret = true;
+    } else{
+        var x : integer;
+        ret = false;
+    }
+    return ret;
+}

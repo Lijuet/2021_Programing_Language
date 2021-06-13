@@ -1,0 +1,7 @@
+procedure Main() return integer
+{
+	var k = 2;
+
+	return 0;
+}
+

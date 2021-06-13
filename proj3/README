@@ -1,0 +1,12 @@
+Making Scanner and Parser for tiny language.
+
+1. Scanner
+Regular expressions split character streams into token stream.
+When scanner find the characters which matches regular expressions,
+scanner execute action part.
+And I return the token to parser.
+
+2. Parser
+When scanner delivers tokens, the parser make parse tree based on grammars.
+To avoid ambiguity, I define precedence and associativity based on C operator precedence.
+If the parser encounter what it can't parse, it throws error.
